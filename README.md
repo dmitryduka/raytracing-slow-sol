@@ -4,10 +4,11 @@ A quick experiment on how raytraced primitives look like if they could move fast
 Demonstrated below is a sphere and a couple of boxes. The sphere moves periodically along the X axis according to `sin` function. The left box is doing the same. The right box rotates around the Y axis.
 
 # Speed of light is 30 units/s
-![Alt text](images/normal.gif?raw=true "C=30")
+https://user-images.githubusercontent.com/1927568/190577035-923234ee-2c98-4deb-afbf-6ce3c545c8e7.mp4
 
 # Speed of light is 0.5 units/s
-![Alt text](images/slow.gif?raw=true "C=0.5")
+https://user-images.githubusercontent.com/1927568/190577295-1932e1c4-a341-45e4-b190-049728ea52d4.mp4
+
 
 This repository doesn't contain build scripts.
 Dependencies are:
