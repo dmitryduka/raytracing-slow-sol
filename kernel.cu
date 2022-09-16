@@ -21,14 +21,11 @@ namespace math
     struct mat4 {
         float m[4][4];
 
-        __host__ __device__ __forceinline__ mat4() {
-            m[0][0] = 1.0; m[1][0] = 0.0; m[2][0] = 0.0; m[3][0] = 0.0;
-            m[0][1] = 0.0; m[1][1] = 1.0; m[2][1] = 0.0; m[3][1] = 0.0;
-            m[0][2] = 0.0; m[1][2] = 0.0; m[2][2] = 1.0; m[3][2] = 0.0;
-            m[0][3] = 0.0; m[1][3] = 0.0; m[2][3] = 0.0; m[3][3] = 1.0;
+        __device__ mat4() {
+            identity();
         }
 
-        __host__ __device__ __forceinline__ mat4(
+        __device__ mat4(
             const float m11, const float m12, const float m13, const float m14,
             const float m21, const float m22, const float m23, const float m24,
             const float m31, const float m32, const float m33, const float m34,
@@ -40,11 +37,11 @@ namespace math
             m[0][3] = m41; m[1][3] = m42; m[2][3] = m43; m[3][3] = m44;
         }
 
-        __host__ __device__ __forceinline__ float* operator[] (const size_t idx) {
+        __device__ float* operator[] (const size_t idx) {
             return m[idx];
         }
 
-        __host__ __device__ __forceinline__ float4 operator*(const float4& v) const {
+        __device__ float4 operator*(const float4& v) const {
             float4 ret;
             ret.x = m[0][0] * v.x + m[1][0] * v.y + m[2][0] * v.z + m[3][0] * v.w;
             ret.y = m[0][1] * v.x + m[1][1] * v.y + m[2][1] * v.z + m[3][1] * v.w;
@@ -53,19 +50,19 @@ namespace math
             return ret;
         }
 
-        __host__ __device__ __forceinline__ mat4 inverse() const {
-            auto n11 = m[0][0], n12 = m[1][0], n13 = m[2][0], n14 = m[3][0];
-            auto n21 = m[0][1], n22 = m[1][1], n23 = m[2][1], n24 = m[3][1];
-            auto n31 = m[0][2], n32 = m[1][2], n33 = m[2][2], n34 = m[3][2];
-            auto n41 = m[0][3], n42 = m[1][3], n43 = m[2][3], n44 = m[3][3];
+        __device__ mat4 inverse() const {
+            const auto n11 = m[0][0], n12 = m[1][0], n13 = m[2][0], n14 = m[3][0];
+            const auto n21 = m[0][1], n22 = m[1][1], n23 = m[2][1], n24 = m[3][1];
+            const auto n31 = m[0][2], n32 = m[1][2], n33 = m[2][2], n34 = m[3][2];
+            const auto n41 = m[0][3], n42 = m[1][3], n43 = m[2][3], n44 = m[3][3];
 
-            auto t11 = n23 * n34 * n42 - n24 * n33 * n42 + n24 * n32 * n43 - n22 * n34 * n43 - n23 * n32 * n44 + n22 * n33 * n44;
-            auto t12 = n14 * n33 * n42 - n13 * n34 * n42 - n14 * n32 * n43 + n12 * n34 * n43 + n13 * n32 * n44 - n12 * n33 * n44;
-            auto t13 = n13 * n24 * n42 - n14 * n23 * n42 + n14 * n22 * n43 - n12 * n24 * n43 - n13 * n22 * n44 + n12 * n23 * n44;
-            auto t14 = n14 * n23 * n32 - n13 * n24 * n32 - n14 * n22 * n33 + n12 * n24 * n33 + n13 * n22 * n34 - n12 * n23 * n34;
+            const auto t11 = n23 * n34 * n42 - n24 * n33 * n42 + n24 * n32 * n43 - n22 * n34 * n43 - n23 * n32 * n44 + n22 * n33 * n44;
+            const auto t12 = n14 * n33 * n42 - n13 * n34 * n42 - n14 * n32 * n43 + n12 * n34 * n43 + n13 * n32 * n44 - n12 * n33 * n44;
+            const auto t13 = n13 * n24 * n42 - n14 * n23 * n42 + n14 * n22 * n43 - n12 * n24 * n43 - n13 * n22 * n44 + n12 * n23 * n44;
+            const auto t14 = n14 * n23 * n32 - n13 * n24 * n32 - n14 * n22 * n33 + n12 * n24 * n33 + n13 * n22 * n34 - n12 * n23 * n34;
 
-            auto det = n11 * t11 + n21 * t12 + n31 * t13 + n41 * t14;
-            auto idet = 1.0f / det;
+            const auto det = n11 * t11 + n21 * t12 + n31 * t13 + n41 * t14;
+            const auto idet = 1.0f / det;
 
             mat4 ret;
 
@@ -92,18 +89,18 @@ namespace math
             return ret;
         }
 
-        __host__ __device__ __forceinline__ void identity() {
-            m[0][0] = 1.0; m[1][0] = 0.0; m[2][0] = 0.0; m[3][0] = 0.0;
-            m[0][1] = 0.0; m[1][1] = 1.0; m[2][1] = 0.0; m[3][1] = 0.0;
-            m[0][2] = 0.0; m[1][2] = 0.0; m[2][2] = 1.0; m[3][2] = 0.0;
-            m[0][3] = 0.0; m[1][3] = 0.0; m[2][3] = 0.0; m[3][3] = 1.0;
+        __device__ void identity() {
+            memset(m, 0, sizeof(m));
+            for (uint32_t i = 0; i < 4; ++i)
+                m[i][i] = 1.0f;
         }
 
-        __host__ __device__ __forceinline__ void rotateY(float angle) {
-            m[0][0] = cos(angle); m[1][0] = 0.0; m[2][0] = sin(angle); m[3][0] = 0.0;
-            m[0][1] = 0.0; m[1][1] = 1.0; m[2][1] = 0.0; m[3][1] = 0.0;
-            m[0][2] = -sin(angle); m[1][2] = 0.0; m[2][2] = cos(angle); m[3][2] = 0.0;
-            m[0][3] = 0.0; m[1][3] = 0.0; m[2][3] = 0.0; m[3][3] = 1.0;
+        __device__ void rotateY(float angle) {
+            identity();
+            m[0][0] = cos(angle); 
+            m[2][0] = sin(angle);
+            m[0][2] = -sin(angle); 
+            m[2][2] = cos(angle);
         }
     };
 }
